@@ -1,18 +1,18 @@
-import { wait } from '../src/wait'
+import {wait} from '../src/wait'
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
-import { expect, test } from '@jest/globals'
-import { mv } from '../src/io'
+import {expect, test} from '@jest/globals'
+import {mv} from '../src/io'
 import * as fs from 'fs'
 
 test('io/mv file runs', async () => {
   const src = path.join(__dirname, '..', 'tmp/file', 'foo')
   const dest = path.join(__dirname, '..', 'tmp/file', 'bar')
 
-  fs.mkdirSync(path.join(__dirname, '..', 'tmp/file'), { recursive: true })
+  fs.mkdirSync(path.join(__dirname, '..', 'tmp/file'), {recursive: true})
   fs.writeFileSync(src, 'hello world', 'utf8')
-  fs.rmSync(dest, { force: true })
+  fs.rmSync(dest, {force: true})
 
   await mv(src, dest)
 
@@ -24,8 +24,8 @@ test('io/mv dir runs', async () => {
   const src = path.join(__dirname, '..', 'tmp/dir', 'foo')
   const dest = path.join(__dirname, '..', 'tmp/dir', 'bar')
 
-  fs.mkdirSync(src, { recursive: true })
-  fs.rmSync(dest, { recursive: true, force: true })
+  fs.mkdirSync(src, {recursive: true})
+  fs.rmSync(dest, {recursive: true, force: true})
 
   await mv(src, dest)
 
@@ -60,5 +60,5 @@ test('test runs', () => {
   }
   console.log(cp.execFileSync(np, [ip], options).toString())
 
-  fs.rmSync(`${src}.bak`, { force: true })
+  fs.rmSync(`${src}.bak`, {force: true})
 })
