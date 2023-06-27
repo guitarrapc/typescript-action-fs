@@ -1,9 +1,11 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import { wait } from './wait'
+import { mv } from './io'
 
 async function run(): Promise<void> {
   try {
     const ms: string = core.getInput('milliseconds')
+    const src: string = core.getInput('src')
     core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
 
     core.debug(new Date().toTimeString())
@@ -11,6 +13,9 @@ async function run(): Promise<void> {
     core.debug(new Date().toTimeString())
 
     core.setOutput('time', new Date().toTimeString())
+
+    // io
+    mv(src, `${src}.bak`)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
