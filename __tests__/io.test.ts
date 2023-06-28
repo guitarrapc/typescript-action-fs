@@ -19,6 +19,7 @@ test('io/mv file runs', async () => {
 
   expect(fs.existsSync(src)).toBe(false)
   expect(fs.existsSync(dest)).toBe(true)
+  expect(fs.readFileSync(dest, 'utf8')).toBe('hello world')
 })
 
 test('io/mv dir runs', async () => {
