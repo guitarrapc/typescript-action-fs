@@ -42,13 +42,27 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.mkdirP = exports.mv = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const io = __importStar(__nccwpck_require__(436));
-function mv(src, dest) {
+/**
+ * Moves a path.
+ *
+ * @param     source    source path
+ * @param     dest      destination path
+ * @returns   Promise<void>
+ */
+function mv(source, dest) {
     return __awaiter(this, void 0, void 0, function* () {
-        core.info(`mv ${src} ${dest}`);
-        yield io.mv(src, dest);
+        core.info(`mv ${source} ${dest}`);
+        yield io.mv(source, dest);
     });
 }
 exports.mv = mv;
+/**
+ * Make a directory.  Creates the full path with folders in between
+ * Will throw if it fails
+ *
+ * @param   fsPath        path to create
+ * @returns Promise<void>
+ */
 function mkdirP(fsPath) {
     return __awaiter(this, void 0, void 0, function* () {
         core.info(`mkdir -p ${fsPath}`);

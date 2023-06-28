@@ -1,8 +1,8 @@
-import { wait } from '../src/wait'
+import {wait} from '../src/wait'
 import * as process from 'process'
 import * as cp from 'child_process'
 import * as path from 'path'
-import { expect, test } from '@jest/globals'
+import {expect, test} from '@jest/globals'
 import * as fs from 'fs'
 
 test('throws invalid number', async () => {
@@ -28,9 +28,9 @@ test('test runs', () => {
   process.env['INPUT_WORKSPACE'] = 'test-path'
   process.env['GITHUB_WORKSPACE'] = githubWorkspace
 
-  fs.mkdirSync(githubWorkspace, { recursive: true })
+  fs.mkdirSync(githubWorkspace, {recursive: true})
   fs.writeFileSync(src, 'hello world', 'utf8')
-  fs.rmSync(`${src}.bak`, { force: true })
+  fs.rmSync(`${src}.bak`, {force: true})
   fs.rmSync(path.join(githubWorkspace, testPath), {
     recursive: true,
     force: true
