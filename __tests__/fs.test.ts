@@ -22,6 +22,7 @@ test('fs/symlink dir runs', async () => {
 
   expect(fs.existsSync(target)).toBe(true)
   expect(fs.existsSync(link)).toBe(true)
+  expect(fs.lstatSync(link).isSymbolicLink()).toBe(true)
   expect(fs.readFileSync(path.join(link, 'dummy.txt'), 'utf8')).toBe(
     'hello world'
   )
@@ -45,6 +46,7 @@ test('fs/symlink file runs', async () => {
 
   expect(fs.existsSync(target)).toBe(true)
   expect(fs.existsSync(link)).toBe(true)
+  expect(fs.lstatSync(link).isSymbolicLink()).toBe(true)
   expect(fs.readFileSync(link, 'utf8')).toBe('hello world')
 })
 
@@ -66,6 +68,7 @@ test('fs/symlink empty runs', async () => {
 
   expect(fs.existsSync(target)).toBe(true)
   expect(fs.existsSync(link)).toBe(true)
+  expect(fs.lstatSync(link).isSymbolicLink()).toBe(true)
   expect(fs.readFileSync(link, 'utf8')).toBe('hello world')
 })
 
