@@ -22,7 +22,9 @@ test('fs/symlink dir runs', async () => {
 
   expect(fs.existsSync(target)).toBe(true)
   expect(fs.existsSync(link)).toBe(true)
-  expect(fs.readFileSync(dummy, 'utf8')).toBe('hello world')
+  expect(fs.readFileSync(path.join(link, 'dummy.txt'), 'utf8')).toBe(
+    'hello world'
+  )
 })
 
 test('fs/symlink file runs', async () => {
