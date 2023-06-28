@@ -39,7 +39,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.mv = void 0;
+exports.mkdirP = exports.mv = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const io = __importStar(__nccwpck_require__(436));
 function mv(src, dest) {
@@ -49,6 +49,13 @@ function mv(src, dest) {
     });
 }
 exports.mv = mv;
+function mkdirP(fsPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.info(`mkdir -p ${fsPath}`);
+        yield io.mkdirP(fsPath);
+    });
+}
+exports.mkdirP = mkdirP;
 
 
 /***/ }),
@@ -90,8 +97,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
+const path_1 = __importDefault(__nccwpck_require__(17));
 const wait_1 = __nccwpck_require__(817);
 const io_1 = __nccwpck_require__(915);
 function run() {
@@ -99,13 +110,16 @@ function run() {
         try {
             const ms = core.getInput('milliseconds');
             const src = core.getInput('src');
+            const workspace = core.getInput('workspace');
             core.debug(`Waiting ${ms} milliseconds ...`); // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
             core.debug(new Date().toTimeString());
             yield (0, wait_1.wait)(parseInt(ms, 10));
             core.debug(new Date().toTimeString());
             core.setOutput('time', new Date().toTimeString());
             // io
+            const virtualWorkspacePath = path_1.default.join(process.env.GITHUB_WORKSPACE, workspace);
             (0, io_1.mv)(src, `${src}.bak`);
+            (0, io_1.mkdirP)(virtualWorkspacePath);
         }
         catch (error) {
             if (error instanceof Error)
