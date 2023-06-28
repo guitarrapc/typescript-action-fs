@@ -1,6 +1,6 @@
 import * as path from 'path'
-import { expect, test } from '@jest/globals'
-import { mv, mkdirP } from '../src/io'
+import {expect, test} from '@jest/globals'
+import {mv, mkdirP} from '../src/io'
 import * as fs from 'fs'
 
 test('io/mv file runs', async () => {
@@ -8,8 +8,8 @@ test('io/mv file runs', async () => {
   const src = path.join(dir, 'foo')
   const dest = path.join(dir, 'bar')
 
-  fs.mkdirSync(dir, { recursive: true })
-  fs.rmSync(dest, { force: true })
+  fs.mkdirSync(dir, {recursive: true})
+  fs.rmSync(dest, {force: true})
   fs.writeFileSync(src, 'hello world', 'utf8')
 
   await mv(src, dest)
@@ -23,8 +23,8 @@ test('io/mv dir runs', async () => {
   const src = path.join(dir, 'foo')
   const dest = path.join(dir, 'bar')
 
-  fs.mkdirSync(src, { recursive: true })
-  fs.rmSync(dest, { recursive: true, force: true })
+  fs.mkdirSync(src, {recursive: true})
+  fs.rmSync(dest, {recursive: true, force: true})
 
   await mv(src, dest)
 
@@ -37,7 +37,7 @@ test('io/mkdirP runs', async () => {
   const dirName = 'test-path'
   const virtualWorkspacePath = path.join(dir, dirName)
 
-  fs.rmSync(virtualWorkspacePath, { recursive: true, force: true })
+  fs.rmSync(virtualWorkspacePath, {recursive: true, force: true})
 
   await mkdirP(virtualWorkspacePath)
   expect(fs.existsSync(virtualWorkspacePath)).toBe(true)
