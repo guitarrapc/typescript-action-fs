@@ -12,6 +12,9 @@ test('io/mv file runs', async () => {
   fs.rmSync(dest, {force: true})
   fs.writeFileSync(src, 'hello world', 'utf8')
 
+  expect(fs.existsSync(src)).toBe(true)
+  expect(fs.existsSync(dest)).toBe(false)
+
   await mv(src, dest)
 
   expect(fs.existsSync(src)).toBe(false)
@@ -26,6 +29,9 @@ test('io/mv dir runs', async () => {
   fs.mkdirSync(src, {recursive: true})
   fs.rmSync(dest, {recursive: true, force: true})
 
+  expect(fs.existsSync(src)).toBe(true)
+  expect(fs.existsSync(dest)).toBe(false)
+
   await mv(src, dest)
 
   expect(fs.existsSync(src)).toBe(false)
@@ -38,6 +44,8 @@ test('io/mkdirP runs', async () => {
   const virtualWorkspacePath = path.join(dir, dirName)
 
   fs.rmSync(virtualWorkspacePath, {recursive: true, force: true})
+
+  expect(fs.existsSync(virtualWorkspacePath)).toBe(false)
 
   await mkdirP(virtualWorkspacePath)
   expect(fs.existsSync(virtualWorkspacePath)).toBe(true)
