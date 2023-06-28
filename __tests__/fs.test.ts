@@ -15,10 +15,33 @@ test('fs/symlink dir runs', async () => {
     fs.unlinkSync(link)
   }
 
+  expect(fs.existsSync(target)).toBe(true)
   expect(fs.existsSync(link)).toBe(false)
 
-  await symlink(target, link, 'dir')
+  await symlink(target, link, 'dir') // specify 'dir' for Windows dir symlink to be work.
 
   expect(fs.existsSync(target)).toBe(true)
   expect(fs.existsSync(link)).toBe(true)
+  expect(fs.readFileSync(dummy, 'utf8')).toBe('hello world')
+})
+
+test('fs/symlink file runs', async () => {
+  const dir = path.join(__dirname, '..', 'tmp/fs_symlink/file')
+  const target = path.join(dir, 'original')
+  const link = path.join(dir, 'link')
+
+  fs.mkdirSync(dir, {recursive: true})
+  fs.writeFileSync(target, 'hello world', 'utf8')
+  if (fs.existsSync(link)) {
+    fs.unlinkSync(link)
+  }
+
+  expect(fs.existsSync(target)).toBe(true)
+  expect(fs.existsSync(link)).toBe(false)
+
+  await symlink(target, link, 'file') // specify 'file' for Windows file symlink to be work.
+
+  expect(fs.existsSync(target)).toBe(true)
+  expect(fs.existsSync(link)).toBe(true)
+  expect(fs.readFileSync(link, 'utf8')).toBe('hello world')
 })
