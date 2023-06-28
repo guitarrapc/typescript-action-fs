@@ -22,19 +22,18 @@ test('wait 500 ms', async () => {
 test('test runs', () => {
   const githubWorkspace = path.join(__dirname, '..', 'tmp/main')
   const testPath = 'test-path'
-  const src = path.join(githubWorkspace, 'test.txt')
+  const src = path.join(githubWorkspace, 'test')
   process.env['INPUT_MILLISECONDS'] = '500'
   process.env['INPUT_SRC'] = src
-  process.env['INPUT_WORKSPACE'] = 'test-path'
+  process.env['INPUT_WORKSPACE'] = testPath
   process.env['GITHUB_WORKSPACE'] = githubWorkspace
 
-  fs.mkdirSync(githubWorkspace, {recursive: true})
-  fs.writeFileSync(src, 'hello world', 'utf8')
-  fs.rmSync(`${src}.bak`, {force: true})
   fs.rmSync(path.join(githubWorkspace, testPath), {
     recursive: true,
     force: true
   })
+  fs.mkdirSync(githubWorkspace, {recursive: true})
+  fs.mkdirSync(src)
 
   const np = process.execPath
   const ip = path.join(__dirname, '..', 'lib', 'main.js')

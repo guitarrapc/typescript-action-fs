@@ -1,6 +1,68 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 78:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.symlink = void 0;
+const core = __importStar(__nccwpck_require__(186));
+const fs = __importStar(__nccwpck_require__(147));
+/**
+ * Creates a symbolic link.
+ *
+ * The `type` argument is only used on Windows platforms and can be one of `'dir'`,`'file'`, or `'junction'`. Windows junction points require the destination path
+ * to be absolute. When using `'junction'`, the `target` argument will
+ * automatically be normalized to absolute path.
+ * @since v10.0.0
+ * @param [type='file']
+ * @return Fulfills with `undefined` upon success.
+ */
+function symlink(target, path, type) {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.info(`ln -s ${target} ${path}`);
+        yield fs.promises.symlink(target, path, type);
+    });
+}
+exports.symlink = symlink;
+
+
+/***/ }),
+
 /***/ 915:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -119,6 +181,8 @@ const core = __importStar(__nccwpck_require__(186));
 const path_1 = __importDefault(__nccwpck_require__(17));
 const wait_1 = __nccwpck_require__(817);
 const io_1 = __nccwpck_require__(915);
+const fs_1 = __nccwpck_require__(78);
+const fs = __importStar(__nccwpck_require__(147));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -131,9 +195,20 @@ function run() {
             core.debug(new Date().toTimeString());
             core.setOutput('time', new Date().toTimeString());
             // io
+            if (process.env.GITHUB_WORKSPACE === '' ||
+                process.env.GITHUB_WORKSPACE === null ||
+                process.env.GITHUB_WORKSPACE === undefined) {
+                process.env['GITHUB_WORKSPACE'] = 'tmp/main';
+            }
             const virtualWorkspacePath = path_1.default.join(process.env.GITHUB_WORKSPACE, workspace);
-            (0, io_1.mv)(src, `${src}.bak`);
-            (0, io_1.mkdirP)(virtualWorkspacePath);
+            yield (0, io_1.mv)(src, `${src}.bak`);
+            yield (0, io_1.mkdirP)(virtualWorkspacePath);
+            // fs
+            const target = path_1.default.join(virtualWorkspacePath, 'symlink', 'target');
+            const link = path_1.default.join(virtualWorkspacePath, 'symlink', 'link');
+            yield (0, io_1.mkdirP)(target);
+            fs.writeFileSync(path_1.default.join(target, 'test.txt'), 'hello world', 'utf8');
+            yield (0, fs_1.symlink)(target, link, 'dir');
         }
         catch (error) {
             if (error instanceof Error)
